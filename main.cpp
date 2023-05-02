@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "LN.h"
+#include "LN10.h"
 using namespace std;
 
 void test_const_char_pos_1();
@@ -21,9 +22,13 @@ void test_copy_pos_2();
 void test_move_pos_1();
 void test_move_pos_2();
 
+void test_LN10_1();
+void test_LN10_2();
+void test_LN10_3();
+
 int main()
 {
- test_move_pos_1();
+ test_LN10_3();
  return 0;
 }
 
@@ -211,4 +216,32 @@ void test_move_pos_2()
  {
   cout << (unsigned)number_moved.bytes[i] << endl;
  }
+}
+
+void test_LN10_1()
+{
+ LN10 num = LN10((uint8_t)230);
+ cout << num.to_string() << endl;
+}
+
+void test_LN10_2()
+{
+ LN10 num1 = LN10((uint8_t)230);
+ LN10 num2 = LN10((uint8_t)195);
+ LN10 num3 = num1 + num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << num3.to_string() << endl;
+}
+
+void test_LN10_3()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ LN10 num3 = num1 + num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
 }

@@ -21,6 +21,7 @@ public:
  LN(LN &&moved);
  LN &operator=(LN &&moved);
  ~LN();
+ string to_string();
 
 private:
  void parse_cstring(const char *numstr);
