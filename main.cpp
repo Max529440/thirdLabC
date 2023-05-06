@@ -24,11 +24,19 @@ void test_move_pos_2();
 
 void test_LN10_1();
 void test_LN10_2();
+void test_LN10_2_1();
 void test_LN10_3();
+void test_LN10_4();
+void test_LN10_5();
+void test_LN10_6();
+void test_LN10_7();
+void test_LN10_8();
+void test_LN10_9();
+void test_LN10_10();
 
 int main()
 {
- test_LN10_3();
+ test_LN10_10();
  return 0;
 }
 
@@ -233,7 +241,34 @@ void test_LN10_2()
  cout << num3.to_string() << endl;
 }
 
+void test_LN10_2_1()
+{
+ LN10 num1 = LN10((uint8_t)43);
+ LN10 num2 = LN10((uint8_t)146);
+ LN10 num3 = num1 + num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << num3.to_string() << endl;
+}
+
 void test_LN10_3()
+{
+ LN10 num11 = LN10((uint8_t)230);
+ LN10 num12 = LN10((uint8_t)195);
+ LN10 num1 = num11 + num12;
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num21 = LN10((uint8_t)43);
+ LN10 num22 = LN10((uint8_t)146);
+ LN10 num2 = num21 + num22;
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ LN10 num3 = num1 + num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_4()
 {
  LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
  cout << "bytesSize: " << num1.bytesSize << endl;
@@ -241,7 +276,106 @@ void test_LN10_3()
  LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
  cout << "bytesSize: " << num2.bytesSize << endl;
  cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = true;
+ num2.isNegative = true;
  LN10 num3 = num1 + num2;
  cout << "bytesSize: " << num3.bytesSize << endl;
  cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_5()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = false;
+ num2.isNegative = true;
+ LN10 num3 = num1 + num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_6()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = true;
+ num2.isNegative = false;
+ LN10 num3 = num1 + num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_7()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = false;
+ num2.isNegative = false;
+ LN10 num3 = num1 - num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_8()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = true;
+ num2.isNegative = true;
+ LN10 num3 = num1 - num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_9()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = true;
+ num2.isNegative = false;
+ LN10 num3 = num1 - num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
+}
+
+void test_LN10_10()
+{
+ LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
+ cout << "bytesSize: " << num1.bytesSize << endl;
+ cout << "num1: " << num1.to_string() << endl;
+ LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
+ cout << "bytesSize: " << num2.bytesSize << endl;
+ cout << "num2: " << num2.to_string() << endl;
+ num1.isNegative = false;
+ num2.isNegative = true;
+ LN10 num3 = num1 - num2;
+ cout << "bytesSize: " << num3.bytesSize << endl;
+ cout << "num3: " << num3.to_string() << endl;
+ cout << "isNegative: " << num3.isNegative << endl;
 }

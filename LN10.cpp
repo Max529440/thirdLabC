@@ -1,4 +1,13 @@
 #include "LN10.h"
+#include <iostream>
+
+LN10::LN10() {
+    capacity = 0;
+    bytesSize = 0;
+    isNegative = false;
+    isNaN = false;
+    bytes = nullptr;
+}
 
 LN10::LN10(uint8_t num)
 {
@@ -97,6 +106,7 @@ LN10 &LN10::operator=(const LN10 &number)
 LN10 LN10::operator+(const LN10 &number)
 {
     LN10 result;
+    std::cout << this << " " << &number << std::endl;
     if (this->isNegative && number.isNegative)
     {
         result = this->add(number);
@@ -107,7 +117,31 @@ LN10 LN10::operator+(const LN10 &number)
         result = this->add(number);
         result.isNegative = false;
     }
-    // todo else (need to implement sub method)
+    else
+    {
+        result = this->sub(number);
+    }
+    return result;
+}
+
+LN10 LN10::operator-(const LN10 &number)
+{
+    LN10 result;
+    std::cout << this << " " << &number << std::endl;
+    if (this->isNegative && !number.isNegative)
+    {
+        result = this->add(number);
+        result.isNegative = true;
+    }
+    else if (!(this->isNegative) && number.isNegative)
+    {
+        result = this->add(number);
+        result.isNegative = false;
+    }
+    else
+    {
+        result = this->sub(number);
+    }
     return result;
 }
 
@@ -150,5 +184,48 @@ string LN10::to_string()
         result += std::to_string(bytes[i]);
     result = string(result.rbegin(), result.rend());
 
+    return result;
+}
+
+// substract from abs bigger
+LN10 LN10::sub(const LN10 &number)
+{
+    LN10 result = LN10((unsigned)(std::max(this->bytesSize, number.bytesSize)));
+    int sign = 1;
+    if (this->bytesSize < result.capacity)
+    {
+        sign = -1;
+    }
+    else if (this->bytesSize == result.capacity)
+    {
+        if (this->bytesSize  == number.bytesSize)
+        {
+            if((*this)[this->bytesSize - 1] < number[number.bytesSize - 1])
+            sign = -1;
+        }
+    }
+    unsigned next = 0;
+    int current;
+    for (int i = 0; i < result.capacity; i++)
+    {
+        current = sign * ((int)(*this)[i] - (int)number[i]) - (int)next;
+        if (current < 0)
+        {
+            current += 10;
+            next = 1;
+        }
+        else
+        {
+            next = 0;
+        }
+        result.bytes[i] = (uint8_t)current;
+    }
+    result.bytesSize = result.capacity - 1;
+    if (result.bytes[result.capacity - 1] != 0)
+        result.bytesSize++;
+    if (sign == -1 && !this->isNegative || sign == 1 && this->isNegative)
+        result.isNegative = true;
+    else
+        result.isNegative = false;
     return result;
 }
