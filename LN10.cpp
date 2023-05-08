@@ -1,7 +1,8 @@
 #include "LN10.h"
 #include <iostream>
 
-LN10::LN10() {
+LN10::LN10()
+{
     capacity = 0;
     bytesSize = 0;
     isNegative = false;
@@ -38,7 +39,7 @@ LN10::LN10(unsigned capacity)
 LN10::LN10(const LN10 &number)
 {
     bytesSize = number.bytesSize;
-    capacity = number.capacity;
+    capacity = number.bytesSize;
     isNegative = number.isNegative;
     isNaN = number.isNaN;
     if (number.bytes)
@@ -52,7 +53,7 @@ LN10::LN10(const LN10 &number)
 
 LN10::LN10(LN10 &&moved) : bytes(moved.bytes),
                            bytesSize(moved.bytesSize),
-                           capacity(moved.capacity),
+                           capacity(moved.bytesSize),
                            isNegative(moved.isNegative),
                            isNaN(moved.isNaN)
 {
@@ -88,7 +89,7 @@ LN10 &LN10::operator=(const LN10 &number)
         if (bytes)
             delete[] bytes;
         bytesSize = number.bytesSize;
-        capacity = number.capacity;
+        capacity = number.bytesSize;
         isNegative = number.isNegative;
         isNaN = number.isNaN;
         if (number.bytes)
@@ -148,6 +149,7 @@ LN10 LN10::operator-(const LN10 &number)
 LN10 LN10::add(const LN10 &number)
 {
     LN10 result = LN10((unsigned)(std::max(this->bytesSize, number.bytesSize) + 1));
+    result.isNaN = this->isNaN;
     unsigned next = 0;
     unsigned current;
     for (int i = 0; i < result.capacity; i++)
@@ -156,9 +158,9 @@ LN10 LN10::add(const LN10 &number)
         next = current / 10;
         result.bytes[i] = current % 10;
     }
-    result.bytesSize = result.capacity - 1;
-    if (result.bytes[result.capacity - 1] != 0)
-        result.bytesSize++;
+    result.bytesSize = result.capacity;
+    while (result.bytes[result.bytesSize - 1] == 0 && result.bytesSize > 1)
+        result.bytesSize--;
     return result;
 }
 
@@ -191,19 +193,8 @@ string LN10::to_string()
 LN10 LN10::sub(const LN10 &number)
 {
     LN10 result = LN10((unsigned)(std::max(this->bytesSize, number.bytesSize)));
-    int sign = 1;
-    if (this->bytesSize < result.capacity)
-    {
-        sign = -1;
-    }
-    else if (this->bytesSize == result.capacity)
-    {
-        if (this->bytesSize  == number.bytesSize)
-        {
-            if((*this)[this->bytesSize - 1] < number[number.bytesSize - 1])
-            sign = -1;
-        }
-    }
+    result.isNaN = this->isNaN;
+    int sign = this->abscmp(number);
     unsigned next = 0;
     int current;
     for (int i = 0; i < result.capacity; i++)
@@ -220,12 +211,129 @@ LN10 LN10::sub(const LN10 &number)
         }
         result.bytes[i] = (uint8_t)current;
     }
-    result.bytesSize = result.capacity - 1;
-    if (result.bytes[result.capacity - 1] != 0)
-        result.bytesSize++;
+    result.bytesSize = result.capacity;
+    while (result.bytes[result.bytesSize - 1] == 0 && result.bytesSize > 1)
+        result.bytesSize--;
     if (sign == -1 && !this->isNegative || sign == 1 && this->isNegative)
         result.isNegative = true;
     else
         result.isNegative = false;
+    return result;
+}
+
+int LN10::abscmp(const LN10 &number)
+{
+    if (this->bytesSize < number.bytesSize)
+        return -1;
+    if (this->bytesSize > number.bytesSize)
+        return 1;
+    if ((*this)[this->bytesSize - 1] < number[number.bytesSize - 1])
+        return -1;
+    if ((*this)[this->bytesSize - 1] > number[number.bytesSize - 1])
+        return 1;
+    return 0;
+}
+
+int LN10::cmp(const LN10 &number)
+{
+    if (this->isNegative && number.isNegative)
+    {
+        if (this->abscmp(number) == -1)
+            return 1;
+        if (this->abscmp(number) == 1)
+            return -1;
+        return 0;
+    }
+    if (!this->isNegative && number.isNegative)
+    {
+        return 1;
+    }
+    if (this->isNegative && !number.isNegative)
+    {
+        return -1;
+    }
+    if (this->abscmp(number) == -1)
+        return -1;
+    if (this->abscmp(number) == 1)
+        return 1;
+    return 0;
+}
+
+bool LN10::operator<(const LN10 &number)
+{
+    return this->cmp(number) == -1;
+}
+
+bool LN10::operator>(const LN10 &number)
+{
+    return this->cmp(number) == 1;
+}
+
+bool LN10::operator<=(const LN10 &number)
+{
+    return this->cmp(number) <= 0;
+}
+
+bool LN10::operator>=(const LN10 &number)
+{
+    return this->cmp(number) >= 0;
+}
+
+bool LN10::operator==(const LN10 &number)
+{
+    return this->cmp(number) == 0;
+}
+
+bool LN10::operator!=(const LN10 &number)
+{
+    return this->cmp(number) != 0;
+}
+
+LN10 LN10::mult(uint8_t digit, unsigned shift)
+{
+    LN10 tmp = LN10(this->bytesSize + 1 + shift);
+    tmp.isNegative = this->isNegative;
+    tmp.isNaN = this->isNaN;
+    uint8_t next = 0;
+    uint8_t digitmult;
+    for (int i = 0; i < shift; i++)
+    {
+        tmp.bytes[tmp.bytesSize] = 0;
+        tmp.bytesSize++;
+    }
+    for (int i = 0; i < this->bytesSize + 1; i++)
+    {
+        digitmult = (*this)[i] * digit + next;
+        tmp.bytes[tmp.bytesSize] = digitmult % 10;
+        next = digitmult / 10;
+        tmp.bytesSize++;
+        if (tmp.bytesSize == tmp.capacity - 1 && next == 0)
+            break;
+    }
+    LN10 result;
+    if (tmp.bytesSize < tmp.capacity)
+    {
+        result.capacity = tmp.bytesSize;
+        result.bytes = new uint8_t[result.capacity];
+        copy_n(tmp.bytes, result.capacity, result.bytes);
+        result.bytesSize = tmp.bytesSize;
+        result.isNegative = tmp.isNegative;
+    }
+    else
+    {
+        result = std::move(tmp);
+    }
+
+    return result;
+}
+
+LN10 LN10::operator*(const LN10 &number)
+{
+    LN10 result = LN10((uint8_t)0);
+    for (int i = 0; i < number.bytesSize; i++)
+    {
+        result = result + this->mult(number[i], i);
+    }
+    result.isNegative = !(this->isNegative == number.isNegative);
     return result;
 }
