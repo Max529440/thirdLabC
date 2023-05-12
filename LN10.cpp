@@ -26,6 +26,41 @@ LN10::LN10(uint8_t num)
     }
 }
 
+LN10::LN10(long long numll)
+{
+    unsigned long long unumll;
+    bytes = nullptr;
+    if (numll < 0)
+    {
+        isNegative = true;
+        unumll = -numll;
+    }
+    else
+    {
+        isNegative = false;
+        unumll = numll;
+    }
+    bytesSize = 1;
+    unsigned long long tmp = unumll;
+
+    while (tmp > 10)
+    {
+        tmp /= 10;
+        bytesSize++;
+    }
+    bytes = new uint8_t[bytesSize];
+    capacity = bytesSize;
+
+    int j = 0;
+    while (unumll > 0)
+    {
+        bytes[j] = unumll % 10;
+        unumll /= 10;
+        j++;
+    }
+    isNaN = false;
+}
+
 LN10::LN10(unsigned capacity)
 {
     this->capacity = capacity;
@@ -46,6 +81,21 @@ LN10::LN10(const LN10 &number)
     {
         bytes = new uint8_t[bytesSize];
         copy_n(number.bytes, bytesSize, bytes);
+    }
+    else
+        bytes = nullptr;
+}
+
+LN10::LN10(const LN10 &number, int first, int last)
+{
+    bytesSize = last - first + 1;
+    capacity = bytesSize;
+    isNegative = false;
+    isNaN = number.isNaN;
+    if (number.bytes)
+    {
+        bytes = new uint8_t[capacity];
+        copy_n(number.bytes + first, bytesSize, bytes);
     }
     else
         bytes = nullptr;
@@ -107,7 +157,6 @@ LN10 &LN10::operator=(const LN10 &number)
 LN10 LN10::operator+(const LN10 &number)
 {
     LN10 result;
-    std::cout << this << " " << &number << std::endl;
     if (this->isNegative && number.isNegative)
     {
         result = this->add(number);
@@ -128,7 +177,6 @@ LN10 LN10::operator+(const LN10 &number)
 LN10 LN10::operator-(const LN10 &number)
 {
     LN10 result;
-    std::cout << this << " " << &number << std::endl;
     if (this->isNegative && !number.isNegative)
     {
         result = this->add(number);
@@ -227,10 +275,13 @@ int LN10::abscmp(const LN10 &number)
         return -1;
     if (this->bytesSize > number.bytesSize)
         return 1;
-    if ((*this)[this->bytesSize - 1] < number[number.bytesSize - 1])
-        return -1;
-    if ((*this)[this->bytesSize - 1] > number[number.bytesSize - 1])
-        return 1;
+    for (int i = this->bytesSize - 1; i >= 0; i--)
+    {
+        if ((*this)[i] < number[i])
+            return -1;
+        if ((*this)[i] > number[i])
+            return 1;
+    }
     return 0;
 }
 
@@ -336,4 +387,81 @@ LN10 LN10::operator*(const LN10 &number)
     }
     result.isNegative = !(this->isNegative == number.isNegative);
     return result;
+}
+
+// result is 10-base digit
+// this->bytesSize = number.bytesSize || number.bytesSize + 1
+uint8_t LN10::choice_division(const LN10 &number)
+{
+    uint8_t result = 0;
+    LN10 tmp = number;
+    tmp.isNegative = false;
+    bool neg = this->isNegative;
+    this->isNegative = false;
+    while ((*this) >= tmp.mult(result + 1, (unsigned)0))
+    {
+        result++;
+    }
+    this->isNegative = neg;
+    return result;
+}
+
+LN10 LN10::division(const LN10 &number)
+{
+    unsigned resultCapacity = this->bytesSize - number.bytesSize + 1;
+    uint8_t *arr = new uint8_t[resultCapacity];
+    unsigned resultSize = 0;
+    unsigned appendix = 0;
+    LN10 tmp = LN10(number.bytesSize);
+    LN10 numberCopy = number;
+    numberCopy.isNegative = false;
+    LN10 thisCopy = LN10(*this);
+    thisCopy.isNegative = false;
+    unsigned prevBytesSize = thisCopy.bytesSize;
+    ;
+    for (int i = this->bytesSize - 1; i >= numberCopy.bytesSize - 1; i--)
+    {
+        tmp.bytes = thisCopy.bytes + i - numberCopy.bytesSize + 1;
+        tmp.bytesSize = number.bytesSize + appendix;
+
+        arr[resultSize] = tmp.choice_division(numberCopy);
+        thisCopy = LN10(thisCopy - (LN10(arr[resultSize]) * numberCopy).mult(1, i - number.bytesSize + 1));
+        if (arr[resultSize] == 0 || thisCopy.bytesSize == prevBytesSize)
+        {
+            appendix++;
+        }
+        else if (prevBytesSize - thisCopy.bytesSize != 1)
+        {
+            appendix = 0;
+        }
+        prevBytesSize = thisCopy.bytesSize;
+        resultSize++;
+    }
+    tmp.bytes = nullptr;
+    for (int i = resultSize; i < resultCapacity; i++)
+        arr[i] = 0;
+    int left = 0, right = resultSize - 1;
+    uint8_t buf;
+    while (left < right)
+    {
+        buf = arr[left];
+        arr[left] = arr[right];
+        arr[right] = buf;
+        left++;
+        right--;
+    }
+
+    LN10 result = LN10(resultCapacity);
+    result.bytesSize = resultSize;
+    result.bytes = arr;
+    while (result.bytes[result.bytesSize - 1] == 0 && result.bytesSize > 1)
+        result.bytesSize--;
+    result.isNegative = !(this->isNegative == number.isNegative);
+
+    return result;
+}
+
+LN10 LN10::operator/(const LN10 &number)
+{
+    return this->division(number);
 }
