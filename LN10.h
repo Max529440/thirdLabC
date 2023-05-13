@@ -45,16 +45,22 @@ public:
  bool operator!=(const LN10 &number);
  LN10 operator*(const LN10 &number);
  LN10 operator/(const LN10 &number);
+ LN10 operator%(const LN10 &number);
+ LN10 operator~();
+ LN10 operator-();
 
 private:
  LN10 add(const LN10 &number);
  LN10 sub(const LN10 &number);
+
 public:
  LN10 mult(uint8_t digit, unsigned shift);
  int abscmp(const LN10 &number);
  int cmp(const LN10 &number);
  uint8_t choice_division(const LN10 &number);
  LN10 division(const LN10 &number);
+ LN10 mod(const LN10 &number);
+ LN10 sqrt();
 
  // todo: all operations with NaN return NaN
 };

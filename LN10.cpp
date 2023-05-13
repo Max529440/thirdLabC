@@ -43,7 +43,7 @@ LN10::LN10(long long numll)
     bytesSize = 1;
     unsigned long long tmp = unumll;
 
-    while (tmp > 10)
+    while (tmp >= 10)
     {
         tmp /= 10;
         bytesSize++;
@@ -157,6 +157,11 @@ LN10 &LN10::operator=(const LN10 &number)
 LN10 LN10::operator+(const LN10 &number)
 {
     LN10 result;
+    if (number.isNaN || this->isNaN)
+    {
+        result.isNaN = true;
+        return result;
+    }
     if (this->isNegative && number.isNegative)
     {
         result = this->add(number);
@@ -177,6 +182,11 @@ LN10 LN10::operator+(const LN10 &number)
 LN10 LN10::operator-(const LN10 &number)
 {
     LN10 result;
+    if (number.isNaN || this->isNaN)
+    {
+        result.isNaN = true;
+        return result;
+    }
     if (this->isNegative && !number.isNegative)
     {
         result = this->add(number);
@@ -229,6 +239,8 @@ LN10::~LN10()
 
 string LN10::to_string()
 {
+    if (this->isNaN)
+        return string("NaN");
     string result = string("");
     for (int i = 0; i < this->bytesSize; i++)
         result += std::to_string(bytes[i]);
@@ -381,6 +393,11 @@ LN10 LN10::mult(uint8_t digit, unsigned shift)
 LN10 LN10::operator*(const LN10 &number)
 {
     LN10 result = LN10((uint8_t)0);
+    if (number.isNaN || this->isNaN)
+    {
+        result.isNaN = true;
+        return result;
+    }
     for (int i = 0; i < number.bytesSize; i++)
     {
         result = result + this->mult(number[i], i);
@@ -395,14 +412,10 @@ uint8_t LN10::choice_division(const LN10 &number)
 {
     uint8_t result = 0;
     LN10 tmp = number;
-    tmp.isNegative = false;
-    bool neg = this->isNegative;
-    this->isNegative = false;
     while ((*this) >= tmp.mult(result + 1, (unsigned)0))
     {
         result++;
     }
-    this->isNegative = neg;
     return result;
 }
 
@@ -418,13 +431,13 @@ LN10 LN10::division(const LN10 &number)
     LN10 thisCopy = LN10(*this);
     thisCopy.isNegative = false;
     unsigned prevBytesSize = thisCopy.bytesSize;
-    ;
-    for (int i = this->bytesSize - 1; i >= numberCopy.bytesSize - 1; i--)
+    for (int i = (int)this->bytesSize - 1; i >= (int)numberCopy.bytesSize - 1; i--)
     {
         tmp.bytes = thisCopy.bytes + i - numberCopy.bytesSize + 1;
         tmp.bytesSize = number.bytesSize + appendix;
 
         arr[resultSize] = tmp.choice_division(numberCopy);
+
         thisCopy = LN10(thisCopy - (LN10(arr[resultSize]) * numberCopy).mult(1, i - number.bytesSize + 1));
         if (arr[resultSize] == 0 || thisCopy.bytesSize == prevBytesSize)
         {
@@ -463,5 +476,83 @@ LN10 LN10::division(const LN10 &number)
 
 LN10 LN10::operator/(const LN10 &number)
 {
+    if (LN10((long long)0) == number || number.isNaN || this->isNaN)
+    {
+        LN10 result;
+        result.isNaN = true;
+        return result;
+    }
     return this->division(number);
+}
+
+LN10 LN10::mod(const LN10 &number)
+{
+    LN10 result = (*this) - (((*this) / number) * number);
+    if (this->isNegative != number.isNegative)
+    {
+        return result + number;
+    }
+    return result;
+}
+
+LN10 LN10::operator%(const LN10 &number)
+{
+    if (LN10((long long)0) == number || number.isNaN || this->isNaN)
+    {
+        LN10 result;
+        result.isNaN = true;
+        return result;
+    }
+    return this->mod(number);
+}
+
+LN10 LN10::sqrt()
+{
+    LN10 mid = LN10((long long)0);
+
+    if (this->isNegative)
+    {
+        mid.isNaN = true;
+        return mid;
+    }
+
+    LN10 left = LN10((long long)0);
+    LN10 right = LN10(*this);
+    LN10 postmid;
+    while (left < right)
+    {
+        cout << "left: " << left.to_string() << ", right: " << right.to_string() << endl;
+        cout << "left + right = " << (left + right).to_string() << endl;
+        mid = (left + right) / LN10((long long)2);
+        cout << mid.to_string() << endl;
+        postmid = mid + LN10((long long)1);
+        if ((*this) == (postmid * postmid))
+            return postmid;
+        if ((*this) < (postmid * postmid) && (*this) >= mid * mid)
+            break;
+        if ((*this) < mid * mid)
+        {
+            right = mid;
+        }
+        else
+        {
+            left = mid;
+        }
+    }
+
+    return mid;
+}
+
+LN10 LN10::operator~()
+{
+    return this->sqrt();
+}
+
+LN10 LN10::operator-()
+{
+    if (this->isNaN || (*this) == LN10((long long)0))
+        return *this;
+    LN10 result = *this;
+    result.isNegative = !(this->isNegative);
+    return result;
 }

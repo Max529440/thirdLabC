@@ -78,10 +78,26 @@ void test_LN10_division_4();
 void test_LN10_division_5();
 void test_LN10_division_6();
 void test_LN10_division_7();
+void test_LN10_division_8();
+
+void test_LN10_mod_1();
+void test_LN10_mod_2();
+void test_LN10_mod_3();
+void test_LN10_mod_4();
+void test_LN10_mod_5();
+void test_LN10_mod_6();
+
+void test_LN10_sqrt_1();
+void test_LN10_sqrt_2();
+void test_LN10_sqrt_3();
+void test_LN10_sqrt_4();
+void test_LN10_sqrt_5();
+void test_LN10_sqrt_6();
+void test_LN10_sqrt_7();
 
 int main()
 {
-    test_LN10_division_7();
+    test_LN10_sqrt_7();
     return 0;
 }
 
@@ -993,6 +1009,212 @@ void test_LN10_division_7()
     cout << "isNegative: " << num.isNegative << endl;
     cout << "num1: " << num.to_string() << endl;
 }
+
+void test_LN10_division_8()
+{
+    LN10 num1 = LN10((long long)25);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)2);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "capacity: " << num2.capacity << endl;
+    cout << "isNegative: " << num2.isNegative << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 / num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+// 0
+void test_LN10_mod_1()
+{
+    LN10 num1 = LN10((long long)70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)34);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 % num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num1: " << num.to_string() << endl;
+}
+
+// 19
+void test_LN10_mod_2()
+{
+    LN10 num1 = LN10((long long)70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)57);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 % num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num1: " << num.to_string() << endl;
+}
+
+// 70414
+void test_LN10_mod_3()
+{
+    LN10 num1 = LN10((long long)70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)270414);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 % num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num1: " << num.to_string() << endl;
+}
+
+// >>> 70414 % -57
+// -38
+// >>> -70414 % 57
+// 38
+// >>> -70141 % -57
+// -19
+
+// -38
+void test_LN10_mod_4()
+{
+    LN10 num1 = LN10((long long)70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)-57);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 % num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num1: " << num.to_string() << endl;
+}
+
+// 38
+void test_LN10_mod_5()
+{
+    LN10 num1 = LN10((long long)-70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)57);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 % num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num1: " << num.to_string() << endl;
+}
+
+// -19
+void test_LN10_mod_6()
+{
+    LN10 num1 = LN10((long long)-70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num2 = LN10((long long)-57);
+    cout << "bytesSize: " << num2.bytesSize << endl;
+    cout << "num2: " << num2.to_string() << endl;
+    LN10 num = num1 % num2;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num1: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_1()
+{
+    LN10 num1 = LN10((long long)25);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_2()
+{
+    LN10 num1 = LN10((long long)70414);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_3()
+{
+    LN10 num1 = LN10((long long)101);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_4()
+{
+    LN10 num1 = LN10((long long)0);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_5()
+{
+    LN10 num1 = LN10((long long)1);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_6()
+{
+    LN10 num1 = LN10((long long)2);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_sqrt_7()
+{
+    LN10 num1 = LN10((long long)-2);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = ~num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+
 
 /*
 13823 / 26 = 531
