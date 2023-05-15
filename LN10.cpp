@@ -1,5 +1,6 @@
 #include "LN10.h"
 #include <iostream>
+#include <cstring>
 
 LN10::LN10()
 {
@@ -69,6 +70,65 @@ LN10::LN10(unsigned capacity)
     bytesSize = 0;
     bytes = nullptr;
     bytes = new uint8_t[capacity];
+}
+
+LN10::LN10(const char *numstr, bool base_is_10)
+{
+    unsigned num_len = strlen(numstr);
+    bytes = nullptr;
+    isNaN = false;
+    capacity = 0;
+    bytesSize = 0;
+    isNegative = false;
+
+    if (num_len == 0 || !base_is_10)
+    {
+        setNaN();
+        return;
+    }
+    if (num_len == 1 && !(is_10_base_digit(numstr[0])))
+    {
+        setNaN();
+        return;
+    }
+    int start = 0;
+    if (numstr[0] == '-')
+    {
+        isNegative = true;
+        start = 1;
+    }
+
+    for (int i = (int)num_len - 1; i >= start; i--)
+    {
+        if (!is_10_base_digit(numstr[i]))
+        {
+            setNaN();
+            return;
+        }
+        capacity++;
+    }
+    bytes = new uint8_t[capacity];
+    for (int i = (int)num_len - 1; i >= start; i--)
+    {
+        bytes[bytesSize] = numstr[i] - '0';
+        bytesSize++;
+    }
+}
+
+bool is_10_base_digit(char ch)
+{
+    return (ch >= '0' && ch <= '9');
+}
+
+void LN10::setNaN()
+{
+    capacity = 0;
+    isNegative = false;
+    isNaN = true;
+    bytesSize = 0;
+    if (bytes)
+        delete[] bytes;
+    bytes = nullptr;
 }
 
 LN10::LN10(const LN10 &number)
@@ -226,7 +286,7 @@ uint8_t LN10::operator[](int index) const
 {
     if (index < 0)
         throw NegativeIndexError("Index can not be negative");
-    if (index < bytesSize)
+    if (index < (int)bytesSize)
         return bytes[index];
     return 0;
 }
@@ -244,6 +304,8 @@ string LN10::to_string()
     string result = string("");
     for (int i = 0; i < this->bytesSize; i++)
         result += std::to_string(bytes[i]);
+    if (this->isNegative)
+        result += "-";
     result = string(result.rbegin(), result.rend());
 
     return result;
@@ -283,11 +345,8 @@ LN10 LN10::sub(const LN10 &number)
 
 int LN10::abscmp(const LN10 &number)
 {
-    if (this->bytesSize < number.bytesSize)
-        return -1;
-    if (this->bytesSize > number.bytesSize)
-        return 1;
-    for (int i = this->bytesSize - 1; i >= 0; i--)
+    int size = std::max(this->bytesSize, number.bytesSize);
+    for (int i = size - 1; i >= 0; i--)
     {
         if ((*this)[i] < number[i])
             return -1;
@@ -301,11 +360,7 @@ int LN10::cmp(const LN10 &number)
 {
     if (this->isNegative && number.isNegative)
     {
-        if (this->abscmp(number) == -1)
-            return 1;
-        if (this->abscmp(number) == 1)
-            return -1;
-        return 0;
+        return -(this->abscmp(number));
     }
     if (!this->isNegative && number.isNegative)
     {
@@ -315,11 +370,7 @@ int LN10::cmp(const LN10 &number)
     {
         return -1;
     }
-    if (this->abscmp(number) == -1)
-        return -1;
-    if (this->abscmp(number) == 1)
-        return 1;
-    return 0;
+    return this->abscmp(number);
 }
 
 bool LN10::operator<(const LN10 &number)
@@ -555,4 +606,9 @@ LN10 LN10::operator-()
     LN10 result = *this;
     result.isNegative = !(this->isNegative);
     return result;
+}
+
+LN10 operator"" _ln(const char *str)
+{
+    return LN10(str, true);
 }

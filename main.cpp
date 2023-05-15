@@ -2,6 +2,8 @@
 #include <vector>
 #include "LN.h"
 #include "LN10.h"
+#include "tests.h"
+#include <cassert>
 using namespace std;
 
 void test_const_char_pos_1();
@@ -21,19 +23,6 @@ void test_copy_pos_2();
 
 void test_move_pos_1();
 void test_move_pos_2();
-
-void test_LN10_1();
-void test_LN10_2();
-void test_LN10_2_1();
-void test_LN10_3();
-void test_LN10_4();
-void test_LN10_5();
-void test_LN10_6();
-void test_LN10_7();
-void test_LN10_8();
-void test_LN10_9();
-void test_LN10_10();
-void test_LN10_11();
 
 void test_LN10_abscmp_1();
 void test_LN10_abscmp_2();
@@ -95,9 +84,32 @@ void test_LN10_sqrt_5();
 void test_LN10_sqrt_6();
 void test_LN10_sqrt_7();
 
+void test_LN10_unary_minus_1();
+void test_LN10_unary_minus_2();
+void test_LN10_unary_minus_3();
+void test_LN10_unary_minus_4();
+
+void test_LN10_literal_1();
+void test_LN10_literal_2();
+void test_LN10_literal_3();
+void test_LN10_literal_4();
+
 int main()
 {
-    test_LN10_sqrt_7();
+    // run_tests();
+    //  LN10 num = 425_ln + -186_ln;
+    //  cout << "capacity: " << num.capacity << endl;
+    //  cout << "bytesSize: " << num.bytesSize << endl;
+    //  cout << "isNegative: " << num.isNegative << endl;
+    //  cout << "num: " << num.to_string() << endl;
+
+    // LN10 num1 = 239_ln;
+    // cout << "capacity: " << num1.capacity << endl;
+    // cout << "bytesSize: " << num1.bytesSize << endl;
+    // cout << "isNegative: " << num1.isNegative << endl;
+    // cout << "num1: " << num1.to_string() << endl;
+
+    run_tests();
     return 0;
 }
 
@@ -287,175 +299,7 @@ void test_move_pos_2()
     }
 }
 
-void test_LN10_1()
-{
-    LN10 num = LN10((uint8_t)230);
-    cout << num.to_string() << endl;
-}
-
-void test_LN10_2()
-{
-    LN10 num1 = LN10((uint8_t)230);
-    LN10 num2 = LN10((uint8_t)195);
-    LN10 num3 = num1 + num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << num3.to_string() << endl;
-}
-
-void test_LN10_2_1()
-{
-    LN10 num1 = LN10((uint8_t)43);
-    LN10 num2 = LN10((uint8_t)146);
-    LN10 num3 = num1 + num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << num3.to_string() << endl;
-}
-
-void test_LN10_3()
-{
-    LN10 num11 = LN10((uint8_t)230);
-    LN10 num12 = LN10((uint8_t)195);
-    LN10 num1 = num11 + num12;
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num21 = LN10((uint8_t)43);
-    LN10 num22 = LN10((uint8_t)146);
-    LN10 num2 = num21 + num22;
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    LN10 num3 = num1 + num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_4()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = true;
-    num2.isNegative = true;
-    LN10 num3 = num1 + num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_5()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = false;
-    num2.isNegative = true;
-    LN10 num3 = num1 + num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_6()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = true;
-    num2.isNegative = false;
-    LN10 num3 = num1 + num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_7()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = false;
-    num2.isNegative = false;
-    LN10 num3 = num1 - num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_8()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = true;
-    num2.isNegative = true;
-    LN10 num3 = num1 - num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_9()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = true;
-    num2.isNegative = false;
-    LN10 num3 = num1 - num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_10()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)43) + LN10((uint8_t)146);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = false;
-    num2.isNegative = true;
-    LN10 num3 = num1 - num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
-
-void test_LN10_11()
-{
-    LN10 num1 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num1.bytesSize << endl;
-    cout << "num1: " << num1.to_string() << endl;
-    LN10 num2 = LN10((uint8_t)230) + LN10((uint8_t)195);
-    cout << "bytesSize: " << num2.bytesSize << endl;
-    cout << "num2: " << num2.to_string() << endl;
-    num1.isNegative = false;
-    num2.isNegative = false;
-    LN10 num3 = num1 - num2;
-    cout << "bytesSize: " << num3.bytesSize << endl;
-    cout << "num3: " << num3.to_string() << endl;
-    cout << "isNegative: " << num3.isNegative << endl;
-}
+//=====================================
 
 void test_LN10_abscmp_1()
 {
@@ -1214,7 +1058,90 @@ void test_LN10_sqrt_7()
     cout << "num: " << num.to_string() << endl;
 }
 
+void test_LN10_unary_minus_1()
+{
+    LN10 num1 = LN10((long long)2);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = -num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
 
+void test_LN10_unary_minus_2()
+{
+    LN10 num1 = LN10((long long)-223454);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = -num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_unary_minus_3()
+{
+    LN10 num1 = LN10((long long)0);
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = -num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_unary_minus_4()
+{
+    LN10 num1;
+    num1.isNaN = true;
+    cout << "bytesSize: " << num1.bytesSize << endl;
+    cout << "num1: " << num1.to_string() << endl;
+    LN10 num = -num1;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_literal_1()
+{
+    LN10 num = 12345_ln;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_literal_2()
+{
+    LN10 num = -12345_ln;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_literal_3()
+{
+    LN10 num = 0_ln;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
+
+void test_LN10_literal_4()
+{
+    LN10 num = NaN_ln;
+    cout << "capacity: " << num.capacity << endl;
+    cout << "bytesSize: " << num.bytesSize << endl;
+    cout << "isNegative: " << num.isNegative << endl;
+    cout << "num: " << num.to_string() << endl;
+}
 
 /*
 13823 / 26 = 531

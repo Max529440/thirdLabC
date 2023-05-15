@@ -27,6 +27,7 @@ public:
  LN10(uint8_t num);
  LN10(long long numll);
  LN10(unsigned capacity);
+ LN10(const char *numstr, bool base_is_10);
  LN10(const LN10 &number);
  LN10(const LN10 &number, int first, int last);
  LN10 &operator=(const LN10 &number);
@@ -52,6 +53,7 @@ public:
 private:
  LN10 add(const LN10 &number);
  LN10 sub(const LN10 &number);
+ void setNaN();
 
 public:
  LN10 mult(uint8_t digit, unsigned shift);
@@ -64,3 +66,8 @@ public:
 
  // todo: all operations with NaN return NaN
 };
+
+LN10 operator"" _ln(const char *str);
+bool is_10_base_digit(char ch);
+
+#define NaN_ln 0.0_ln
